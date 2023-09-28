@@ -1,8 +1,11 @@
 package com.foroAlura.modelo;
+
 import java.time.LocalDateTime;
 
 import com.foroAlura.dto.DatosModificarTopico;
 import com.foroAlura.dto.DatosRegistroTopico;
+import com.foroAlura.dto.DatosUsuarioModificarTopico;
+import com.foroAlura.repository.UsuarioRepository;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -37,32 +40,33 @@ public class Topico {
 	private LocalDateTime fecha_creacion = LocalDateTime.now();
 	@Enumerated(EnumType.STRING)
 	private EstadoTopico estado = EstadoTopico.NO_RESPONDIDO;
-//	@ManyToOne(fetch=FetchType.LAZY)
-	private String autor;
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Usuario autor;
 	private String curso;
 
-	public Topico(DatosRegistroTopico datosRegistroTopico) {
+	public Topico(DatosRegistroTopico datosRegistroTopico, UsuarioRepository usuarioRepository) {
 		this.titulo = datosRegistroTopico.titulo();
 		this.mensaje = datosRegistroTopico.mensaje();
-		this.autor = datosRegistroTopico.autor();
+		this.autor = new Usuario(datosRegistroTopico.autor(), usuarioRepository);
 		this.curso = datosRegistroTopico.curso();
 	}
 
-	public void modificar(@Valid DatosModificarTopico datosModificarTopico) {
-		
-		if(datosModificarTopico.titulo() != null) {
+	public void modificar(@Valid DatosModificarTopico datosModificarTopico, UsuarioRepository usuarioRepository) {
+
+		if (datosModificarTopico.titulo() != null) {
 			this.titulo = datosModificarTopico.titulo();
 		}
-		
-		if(datosModificarTopico.mensaje()!= null) {
+
+		if (datosModificarTopico.mensaje() != null) {
 			this.mensaje = datosModificarTopico.mensaje();
 		}
 
-		if(datosModificarTopico.autor() != null) {
-			this.autor = datosModificarTopico.autor();
+		if (datosModificarTopico.autor() != null) {
+			Usuario usuario = new Usuario(datosModificarTopico.autor(), usuarioRepository);
+			this.autor = usuario;
 		}
 
-		if(datosModificarTopico.curso()!= null) {
+		if (datosModificarTopico.curso() != null) {
 			this.curso = datosModificarTopico.curso();
 		}
 

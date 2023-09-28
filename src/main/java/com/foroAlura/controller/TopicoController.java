@@ -17,6 +17,7 @@ import com.foroAlura.dto.DatosModificarTopico;
 import com.foroAlura.dto.DatosRegistroTopico;
 import com.foroAlura.modelo.Topico;
 import com.foroAlura.repository.TopicoRepository;
+import com.foroAlura.repository.UsuarioRepository;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -24,37 +25,38 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/topicos")
 public class TopicoController {
-	
+
 	@Autowired
 	private TopicoRepository topicoRepository;
-	
+	@Autowired
+	private UsuarioRepository usuarioRepository;
+
 	@PostMapping
 	@Transactional
 	public void registroTopico(@RequestBody @Valid DatosRegistroTopico datosRegistroTopico) {
-		topicoRepository.save(new Topico(datosRegistroTopico));
+		topicoRepository.save(new Topico(datosRegistroTopico, this.usuarioRepository));
 	}
-	
+
 	@GetMapping
 	@Transactional
-	public Page<DatosListadoTopico> listadoTopicos (Pageable paginacion){
+	public Page<Object> listadoTopicos(Pageable paginacion) {
 		return topicoRepository.findAll(paginacion).map(DatosListadoTopico::new);
 	}
-	
+
 	@GetMapping("/{id}")
 	@Transactional
-	public DatosListadoTopico listadoTopicosPorId (@PathVariable Long id){
+	public DatosListadoTopico listadoTopicosPorId(@PathVariable Long id) {
 		return new DatosListadoTopico(topicoRepository.getReferenceById(id));
 	}
-	
+
 	@PutMapping("/{id}")
 	@Transactional
-	public void modificarTopico(@RequestBody @Valid DatosModificarTopico datosModificarTopico,
-								@PathVariable Long id) {
+	public void modificarTopico(@RequestBody @Valid DatosModificarTopico datosModificarTopico, @PathVariable Long id) {
 		Topico topico = topicoRepository.getReferenceById(id);
-		topico.modificar(datosModificarTopico);
-		
+		topico.modificar(datosModificarTopico, this.usuarioRepository);
+
 	}
-	
+
 	@DeleteMapping("/{id}")
 	@Transactional
 	public void eliminarTopico(@PathVariable Long id) {
