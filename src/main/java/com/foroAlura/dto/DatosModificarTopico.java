@@ -1,7 +1,5 @@
 package com.foroAlura.dto;
 
-import com.foroAlura.modelo.Usuario;
-
 public record DatosModificarTopico(
 		
 		String titulo,

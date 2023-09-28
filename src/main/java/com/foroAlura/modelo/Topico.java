@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 
 import com.foroAlura.dto.DatosModificarTopico;
 import com.foroAlura.dto.DatosRegistroTopico;
-import com.foroAlura.dto.DatosUsuarioModificarTopico;
 import com.foroAlura.repository.UsuarioRepository;
 
 import jakarta.persistence.Entity;

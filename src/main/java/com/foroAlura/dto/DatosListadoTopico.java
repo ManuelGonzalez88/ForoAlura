@@ -4,8 +4,6 @@ import java.time.LocalDateTime;
 
 import com.foroAlura.modelo.EstadoTopico;
 import com.foroAlura.modelo.Topico;
-import com.foroAlura.modelo.Usuario;
-import com.foroAlura.repository.UsuarioRepository;
 
 public record DatosListadoTopico(
 		Long id,
